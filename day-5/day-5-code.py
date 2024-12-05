@@ -10,40 +10,33 @@ Problem: Day 5
 Task: Determining the correctness of number patterns given befor/after rules
 """
 
+import math
 import networkx as nx
-import matplotlib.pyplot as plt
 
-with open('test.txt') as f:
+with open('input.txt') as f:
     inputtext = f.read()
 
 rules,pattern = inputtext.split('\n\n')
 rules = rules.split('\n')
 rules = [(int(r.split('|')[0]),int(r.split('|')[1])) for r in rules]
-# nodes = set([item for sub_list in rules for item in sub_list]) # unique values in rules
 
 pattern = pattern.split('\n')
 pattern = [list(map(int, p.split(','))) for p in pattern]
 
-# start using graphs
-G = nx.DiGraph(rules)
-plt_fig_cnt = 1
-plt.figure(plt_fig_cnt)
-plt_fig_cnt += 1
-nx.draw(G, with_labels=True, font_weight='bold')
+G = nx.DiGraph(rules) # create graph which encodes the rules
 
-# check if chain of pattern is included in graph
-for p in pattern:
-    construct = [(p[idx],p[idx+1]) for idx,entry in enumerate(p[:-1])]
-    H = nx.DiGraph(construct)
-    plt.figure(plt_fig_cnt)
-    plt_fig_cnt += 1
-    nx.draw(H, with_labels=True, font_weight='bold')
-    
-    leaves = [v for v, d in G.out_degree() if d == 0]
-    all_paths = []
-    for root in roots:
-        paths = nx.all_simple_paths(G, root, leaves)
-        all_paths.extend(paths)
-    all_paths
+def middle_entry(l):
+    return l[math.floor(len(l)/2)]
 
-plt.show()
+middle_num_sum = 0
+corrected_sum = 0
+for p in pattern:  
+    if nx.is_path(G,p): # check if this pattern is a valid path in graph
+        middle_num_sum += middle_entry(p)
+    else:
+        J = G.subgraph(p)
+        corrected_p = nx.dag_longest_path(J)
+        corrected_sum += middle_entry(corrected_p)
+
+print("Sum of middle numbers of correct patterns %d" % middle_num_sum)
+print("Sum of middle numbers of correct-ed patterns %d" % corrected_sum)
