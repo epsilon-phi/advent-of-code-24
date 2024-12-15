@@ -18,7 +18,7 @@ with open('input.txt') as f:
 
 rules,pattern = inputtext.split('\n\n')
 rules = rules.split('\n')
-rules = [(int(r.split('|')[0]),int(r.split('|')[1])) for r in rules]
+rules = [(int(r.split('|')[0]),int(r.split('|')[1])) for r in rules] 
 
 pattern = pattern.split('\n')
 pattern = [list(map(int, p.split(','))) for p in pattern]

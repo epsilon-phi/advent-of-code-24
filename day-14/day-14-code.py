@@ -14,11 +14,11 @@ import numpy as np
 import networkx as nx
 import re
 
-xmax = 101
-ymax = 103
+xmax = 11#101
+ymax = 7#103
 steps = 100
 
-with open('input.txt') as f:
+with open('test.txt') as f:
     inputtext = f.read()
     
 poses = []
